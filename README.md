@@ -18,6 +18,8 @@ Follow these execution steps in sequence to clear historical database overrides,
 
 # Installation and Setup
 
+
+
 ### 1. Create a virtual environment and activate it
 
 ```bash
@@ -26,14 +28,33 @@ python -m venv .venv
 .venv\Scripts\activate
 # On Linux/Mac
 source .venv/bin/activate
+```
 
+### 2. Install dependencies
+
+```bash
 pip install fastapi uvicorn sqlalchemy pymysql
+```
 
+### 3. Clear existing database tables
+
+Run this script in your MySQL Workbench query tab to ensure a clean data reset:
+
+```sql
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE attendance;
 TRUNCATE TABLE students;
 SET FOREIGN_KEY_CHECKS = 1;
+```
 
+### 4. Seed database with mock data
+
+```bash
 python generate_data.py
+```
 
+### 5. Run the development server
+
+```bash
 uvicorn main:app --reload --port 8000
+
