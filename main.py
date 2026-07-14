@@ -121,6 +121,7 @@ db_session.close()
 def get_dashboard_data():
     db = SessionLocal()
     try:
+        
         # 1. Total Counts
         total_students = db.query(Student).count()
         total_mentors = db.query(Mentor).count()
@@ -129,6 +130,7 @@ def get_dashboard_data():
         # 2. Attendance Stats
         total_attendance_records = db.query(Attendance).count()
         present_count = db.query(Attendance).filter(Attendance.status == "Present").count()
+        absent_count = db.query(Attendance).filter(Attendance.status == "Absent").count()
         
         if total_attendance_records > 0:
             avg_attendance = round((present_count / total_attendance_records) * 100, 1)
@@ -169,7 +171,8 @@ def get_dashboard_data():
             "total_batches": total_batches,
             "average_attendance": f"{avg_attendance}%",
             "batch_wise_attendance": batch_wise_data,
-            "top_students": top_students_list
+            "top_students": top_students_list,
+            "attendance_status_counts": {"present": present_count, "absent": absent_count}
         }
     except Exception as e:
         return {"error": str(e)}
